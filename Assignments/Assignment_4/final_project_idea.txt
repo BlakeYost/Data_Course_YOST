@@ -1,0 +1,11 @@
+My idea for a data analysis final project is analyzing and predicting when a NBA player will peak, or have their best season as far as numbers go. I want to first analyze and see kind of what peak seasons look like and get an average based on multiple factors like height, weight, and years played. (Along with others that I can find on the internet) I then want to try and predict using a custom model, when an NBA player will peak based on these factors. 
+
+The sort of data I will use will be stat lines from probably around the last 20 years, using mostly All-Star caliber players (because I think players that don't play much or at all will skew my data. All-Star caliber players play every game for years and will be a better measurement I believe), and information about their health, like height and weight.
+
+Potential sources I have found:
+For height and weight: https://www.kaggle.com/datasets/drgilermo/nba-players-stats
+This looks really good for player stats https://data.world/etocco/nba-player-stats
+
+What the data might look like: 
+rk	player		pos	#	age	team	#games	#gs	 # mp
+4	Cory Alexander	PG	20	24	SAS	37	3	13.5
