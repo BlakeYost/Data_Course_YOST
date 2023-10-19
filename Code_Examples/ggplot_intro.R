@@ -2,7 +2,7 @@
 
 # Load ggplot2 (it is included in the tidyverse package) ####
 library(tidyverse)
-
+options(scipen = 999)
 # Load the data we will work with (built-in to ggplot)
 data("midwest", package = "ggplot2")
 
@@ -27,7 +27,7 @@ data("midwest", package = "ggplot2")
 ggplot(midwest) # what do you see?
 
 # give it some aesthetics to work with...
-ggplot(midwest, aes(x=area, y=poptotal))  # area and poptotal are columns in 'midwest'
+ggplot(midwest, mapping = aes(x=area, y=poptotal))  # area and poptotal are columns in 'midwest'
 
 # A blank ggplot is drawn. Even though the x and y are specified, there are no points or lines in it. 
 # This is because, ggplot doesn’t assume that you meant a scatterplot or a line chart to be drawn. 
@@ -41,7 +41,9 @@ ggplot(midwest, aes(x=area, y=poptotal))  # area and poptotal are columns in 'mi
 ggplot(midwest, aes(x=area, y=poptotal)) + geom_point() # The "+" tells ggplot to add another layer to our base plot
 
 # Add another geom ... a trendline:
-ggplot(midwest, aes(x=area, y=poptotal)) + geom_point() + geom_smooth(method = "lm")
+ggplot(midwest, aes(x=area, y=poptotal)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", linetype=2, color = "red")
 # The line of best fit is in blue. Can you find out what other method options are available for geom_smooth? 
 
 # Store your plot as an object to add to...
