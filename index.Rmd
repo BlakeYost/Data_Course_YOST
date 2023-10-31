@@ -1,0 +1,19 @@
+---
+output: html_document
+---
+
+# Blake Yost, just a student
+
+Here is my website, I hope you enjoy it.
+
+___
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+knitr::include_graphics("catimage.jpg")
+```
+
+
