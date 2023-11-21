@@ -1,0 +1,102 @@
+---
+title: "Assignment_9_rmarkdown"
+author: "Blake Yost"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(easystats)
+library(janitor)
+library(modelr)
+library(GGally)
+```
+
+
+```{r}
+df <- read_csv("GradSchool_Admissions.csv") %>% 
+  janitor::clean_names()
+```
+
+
+# Data Summary
+A small glimpse of the data:
+```{r}
+df %>% 
+  ggpairs()
+```
+
+Here is a sample plot of what the data looks like
+```{r, echo=TRUE}
+df %>% 
+  ggplot(aes(x=gpa, y=gre, color = admit))+
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(~rank)
+```
+
+
+# Modeling
+First we look at the effect of gpa on admittance, and then add more predictors
+```{r, echo = TRUE}
+m1 <- glm(data=df,
+            formula = admit ~ gpa, family = "binomial")
+
+m2 <- glm(data=df,
+          formula = admit ~ gpa + gre, family = "binomial")
+
+m3 <- glm(data=df,
+          formula = admit ~ gpa+gre+rank, family = "binomial")
+
+m4 <- glm(data=df,
+          formula = admit ~ gpa*gre*rank, family = "binomial")
+```
+Here is a plot comparing the performance of each model. 
+```{r}
+compare_performance(m1,m2,m3,m4) %>% plot
+```
+
+# Predictions Using m4
+Let's use model 4 to try and see some predictions based on what we found.
+Here we get to see the chance someone will get in based on our predictors. 
+```{r}
+df$pred <- predict(m4, type = "response")
+head(df)
+```
+In this new column, if the chance was greater than 0.5, we said they were admitted.
+If the chance was less than 0.5, they were not admitted. 
+```{r}
+df$pred_v2 <- ifelse(df$pred > 0.5, 1, 0)
+head(df)
+```
+
+
+# Predictions vs Actual
+Here is a plot that represents our model 4 predictions alongside our actual results. 
+The black points represent our actual data results.
+The blue and red represent our predictions, blue being Not Admitted, and red being Admitted. 
+```{r, echo=TRUE}
+df %>% 
+  ggplot(aes(x = gpa, y = pred_v2)) +
+  geom_point(aes(color = factor(admit)),size=3) +
+  geom_point(aes(x=gpa, y = admit), color = "black", alpha = 0.5)+
+  scale_color_manual(values = c("blue", "red"),labels = c("Not Admitted", "Admitted")) +
+  labs(x = "GPA", y = "Prediction of Admission")+
+  ggtitle("Actual(Black) vs Predicted Admission Chance")+
+  guides(color = guide_legend(title = "Admission")) +
+  facet_wrap(~rank)
+```
+
+# Conclusions
+Based on our graph, we see that the highest number of red dots that are closest to our Actual results are in Rank 1, which is the highest tier. We can see that our model 4 must like Rank 1 schools. 
+```{r, echo=TRUE}
+m4 %>% model_parameters()
+```
+Based on what we are seeing in this table, GPA increases your Log_Odds by 4.36, much more than GRE or Rank, which we originally thought. 
+We also see that GRE and Rank together almost don't increase the Log_Odds at all. 
+We see that GPA, GRE, and Rank all together is the worst predictor of our data which I find surprising and leaves me wondering if I did the assignment wrong. 
+We can also see by the p-value that Rank has almost no correlation if a student was admitted or not. 
