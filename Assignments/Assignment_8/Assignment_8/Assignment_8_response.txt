@@ -1,0 +1,12 @@
+Are any of your predicted response values from your best model scientifically meaningless? Explain.
+Yes, they are statistically non-significant. 
+
+In your plots, did you find any non-linear relationships? Do a bit of research online and give a link to at least one resource explaining how to deal with modeling non-linear relationships in R.
+Yes, in my final model, it is not quite linear. 
+https://www.r-bloggers.com/2016/02/first-steps-with-non-linear-regression-in-r/ 
+
+Write the code you would use to model the data found in “/Data/non_linear_relationship.csv” with a linear model (there are a few ways of doing this)
+
+m1 <- glm(data=df,
+     formula = predictor ~ response)
+summary(m1)
